@@ -1,0 +1,19 @@
+# For running the app on your own Linux machine with an NVIDIA GPU (Python 3.10–3.12).
+# Install PyTorch first for your CUDA version (https://pytorch.org/get-started/locally/), e.g.
+#   pip install torch==2.11.0 torchaudio==2.11.0 --index-url https://download.pytorch.org/whl/cu128
+# torch and torchaudio must share a minor version or dots.tts refuses to import.
+torch>=2.8.0
+torchaudio>=2.8.0
+
+# dots.tts (pulls in transformers, gradio 6, librosa, soundfile, WeTextProcessing, ...)
+dots.tts==0.3.1
+numpy>=2.2.6
+
+sentencex>=1.0.17
+faster-whisper>=1.1.1
+ctranslate2>=4.6.0
+pysrt>=1.1.2
+requests
+
+# Tests
+pytest

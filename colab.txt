@@ -1,0 +1,14 @@
+# Installed by setup_colab.py on top of Colab's preinstalled torch, torchaudio,
+# transformers and gradio (all versions dots.tts works with).
+dots.tts==0.3.1
+
+# dots.tts needs numpy>=2.2.6; Colab's numba (used by librosa) needs <2.3.
+numpy>=2.2.6,<2.3
+
+# Sentence splitting for long text
+sentencex>=1.0.17
+
+# Whisper: reference transcripts and subtitles
+faster-whisper>=1.1.1
+ctranslate2>=4.6.0
+pysrt>=1.1.2

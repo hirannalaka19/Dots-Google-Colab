@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+.install_ok
+
+# App output and scratch files
+outputs/
+work/
+generated_subtitle/
+subtitle_audio/
+faster-whisper-large-v3-turbo-ct2/
