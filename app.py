@@ -206,6 +206,13 @@ def describe_folder(folder: Path) -> str:
     return str(folder)
 
 
+def skipped_lines_note(lines: list[str], shown: int = 6) -> str:
+    """One status line listing script lines that won't be read aloud."""
+    quoted = [f"“{line[:40]}{'…' if len(line) > 40 else ''}”" for line in lines[:shown]]
+    more = f" and {len(lines) - shown} more" if len(lines) > shown else ""
+    return f"🙈 Not read aloud (headings / text before the first id): {', '.join(quoted)}{more}"
+
+
 def take_summary(take: engine.Take) -> str:
     chunks = f" · {take.chunk_count} chunks" if take.chunk_count > 1 else ""
     return (
@@ -331,11 +338,14 @@ class Handlers:
                  date_text, want_subs, steps, cfg, speaker, normalize, seed, auto_split,
                  chunk_chars, pause, progress=gr.Progress()):
         try:
-            items = narration.parse_script(script)
+            parsed = narration.parse_script(script)
             voice, transcript, notes = build_voice(mode, ref_audio, ref_text, language)
         except (narration.ScriptError, SynthesisError) as exc:
             yield None, f"❌ {exc}", gr.skip(), gr.skip(), gr.skip()
             return
+        items = parsed.narrations
+        if parsed.ignored:
+            notes = [*notes, skipped_lines_note(parsed.ignored)]
 
         settings = make_settings(language, steps, cfg, speaker, normalize, auto_split, chunk_chars, pause)
         used_seed = tts_utils.resolve_seed(seed)
@@ -415,11 +425,15 @@ TIPS = """
 * **Seed:** each seed gives a different rhythm and intonation. The seed used is shown in the status box; type it back in to repeat a take.
 * **Quality:** raise *Inference steps* to 16–32 for slightly better audio at the cost of speed.
 * **Random voice:** when you like a voice, click **Use this take as the reference voice** to keep it for every narration.
-* **Batch script:** one narration per line, starting with its id — `1.1: text`. Lines without an id continue the narration above. If a line of text starts with a number, put a colon after the id.
+* **Batch script:** start each narration with its id — `1.1: text`, `1.1 — text`, or the id alone on its line with the text below. Lines without an id continue the narration above. Headings like `CHAPTER 1` are skipped, anything in `[square brackets]` is treated as a note and not read aloud, and markers like ★ are ignored.
 * **Chinese polyphones:** write tone-marked pinyin to force a reading, e.g. `我生平不hào此道`.
 """
 
-BATCH_PLACEHOLDER = """1.1: The storm had been building all afternoon.
+BATCH_PLACEHOLDER = """CHAPTER 1
+
+1.1 — [COLD OPEN]
+The storm had been building all afternoon.
+
 1.2: By nightfall, the harbour was empty.
 2.1: Morning brought an eerie calm."""
 

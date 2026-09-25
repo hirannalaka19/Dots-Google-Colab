@@ -45,18 +45,24 @@ Optional extras:
 
 ## 🎬 Batch script format
 
-One narration per line, each starting with its id:
+Start each narration with its id. The text can be on the same line or on the lines below:
 
 ```
-1.1: The storm had been building all afternoon.
-1.2: By nightfall, the harbour was empty.
-2.1:
-Morning brought an eerie calm.
-Nobody spoke.
+CHAPTER 1
+
+1.1 — [COLD OPEN] [CHAR: 694]
+The storm had been building all afternoon.
+
+★ 1.2 — [THE WARNING]
+By nightfall, the harbour was empty.
+
+2.1: Morning brought an eerie calm.
 ```
 
-* Ids like `1.1`, `[1.1]`, `3)`, `4 -` and `12 |` all work.
-* Lines without an id continue the narration above them.
+* Ids like `1.1:`, `1.1 —`, `[1.1]`, `3)` and `12 |` all work, with or without a marker like `★` in front.
+* Lines without an id continue the narration above them. In a script that uses ids like `1.1`, a line starting with a plain number (a list item like `1.` or `3:`, or a time like `6:19`) stays part of the narration.
+* Anything in `[square brackets]` is a production note and is **not read aloud**.
+* Headings like `CHAPTER 1` or `Part II`, and any text before the first id, are skipped. The status box lists what was skipped.
 * A script with no ids at all gets one narration per line, numbered `1`, `2`, `3`.
 * Tick **Skip narrations already saved** to resume a batch after Colab disconnects.
 * In **Random voice** mode the first narration's voice is reused for the rest.

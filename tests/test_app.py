@@ -237,6 +237,23 @@ def test_on_batch_saves_each_narration_by_id_in_one_voice(handlers, tmp_path):
     assert calls[1]["prompt_audio_path"] == calls[2]["prompt_audio_path"] is not None
 
 
+def test_on_batch_reads_a_production_script_and_reports_skipped_lines(handlers, tmp_path):
+    script = (
+        "CHAPTER 1\n\n1.1 — [OPENING] [CHAR: 694]\nFirst line.\n\n"
+        "CHAPTER 2\n\n★ 2.4 — [ASK 1 of 3] [CHAR: 557]\nSecond line.\n"
+    )
+    _, status, files, _, _ = run_batch(handlers, script)
+    assert [Path(f).name for f in files] == ["1.1.wav", "2.4.wav"]
+    assert "“CHAPTER 1”, “CHAPTER 2”" in status and "2 saved, 0 failed" in status
+    assert [call["text"] for call in handlers.runtime.calls] == ["First line.", "Second line."]
+
+
+def test_skipped_lines_note_truncates_long_lists():
+    note = app.skipped_lines_note([f"CHAPTER {i}" for i in range(1, 10)] + ["x" * 60])
+    assert "“CHAPTER 6”" in note and "“CHAPTER 7”" not in note and "and 4 more" in note
+    assert "…" in app.skipped_lines_note(["y" * 60])
+
+
 def test_on_batch_skips_existing_files(handlers, tmp_path):
     run_batch(handlers, "1.1: First.")
     _, status, files, _, _ = run_batch(handlers, "1.1: First.\n1.2: Second.", skip_existing=True)
