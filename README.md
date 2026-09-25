@@ -2,7 +2,7 @@
 
 Clone a voice and generate narration with **dots.tts SOAR** on Google Colab. Every take is saved to your **Google Drive** under the narration name you choose (`1.1.wav`, `1.2.wav`, …), in a folder named after your project and the date.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/hirannalaka19/dots-tts-colab/blob/main/Dots_TTS_Colab.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/hirannalaka19/Dots-Google-Colab/blob/main/Dots_TTS_Colab.ipynb)
 
 ---
 
@@ -85,8 +85,8 @@ Whisper (reference transcripts and subtitles) runs on the GPU when its CUDA libr
 Linux with an NVIDIA GPU and Python 3.10–3.12. The text normalizer dots.tts depends on (`pynini`) has no Windows wheels.
 
 ```bash
-git clone https://github.com/hirannalaka19/dots-tts-colab.git
-cd dots-tts-colab
+git clone https://github.com/hirannalaka19/Dots-Google-Colab.git
+cd Dots-Google-Colab
 pip install torch==2.11.0 torchaudio==2.11.0 --index-url https://download.pytorch.org/whl/cu128
 pip install -r requirements.txt
 python app.py            # set DOTS_OUTPUT_ROOT to choose where projects are saved
